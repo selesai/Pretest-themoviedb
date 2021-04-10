@@ -1,10 +1,10 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
 CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" "${PODS_CONFIGURATION_BUILD_DIR}/CrossroadRegex" "${PODS_CONFIGURATION_BUILD_DIR}/Introspect" "${PODS_CONFIGURATION_BUILD_DIR}/KeyboardObserving" "${PODS_CONFIGURATION_BUILD_DIR}/PanModal" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftUIPager"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" "${PODS_CONFIGURATION_BUILD_DIR}/CrossroadRegex" "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/CrossroadRegex/Regex.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Introspect/Introspect.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/KeyboardObserving/KeyboardObserving.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/PanModal/PanModal.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftUIPager/SwiftUIPager.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/CrossroadRegex/Regex.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_LDFLAGS = $(inherited) -framework "Alamofire" -framework "CFNetwork" -framework "Introspect" -framework "KeyboardObserving" -framework "PanModal" -framework "Regex" -framework "SwiftUIPager"
+OTHER_LDFLAGS = $(inherited) -framework "Accelerate" -framework "Alamofire" -framework "CFNetwork" -framework "Kingfisher" -framework "Regex" -weak_framework "Combine" -weak_framework "SwiftUI"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

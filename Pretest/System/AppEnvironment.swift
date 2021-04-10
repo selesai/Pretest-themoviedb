@@ -37,28 +37,38 @@ extension AppEnvironment {
         configuration.httpMaximumConnectionsPerHost = 5
         configuration.requestCachePolicy = .returnCacheDataElseLoad
         configuration.urlCache = .shared
+        Sniffer.enable(in: configuration)
         let urlSession = Session(configuration: configuration)
         return urlSession
     }
     
     private static func configuredWebRepositories(session: Session) -> DIContainer.WebRepositories {
-        
+        let baseURL = "https://api.themoviedb.org"
         let genresWebRepository = RealGenresWebRepository(session: session,
-                                                        baseURL: "https://api.themoviedb.org/")
-        return .init(genresWebRepository: genresWebRepository)
+                                                          baseURL: baseURL)
+        
+        let moviesWebRepository = RealMoviesWebRepository(session: session,
+                                                          baseURL: baseURL)
+        
+        return .init(genresWebRepository: genresWebRepository, moviesWebRepository: moviesWebRepository)
     }
     
     private static func configuredInteractors(appState: Store<AppState>,
                                               webRepositories: DIContainer.WebRepositories
     ) -> DIContainer.Interactors {
         
-        let genresInteractor = RealGenresInteractor(webRepository: webRepositories.genresWebRepository, appState: appState)
-        return .init(genresInteractor: genresInteractor)
+        let genresInteractor = RealGenresInteractor(webRepository: webRepositories.genresWebRepository,
+                                                    appState: appState)
+        
+        let moviesInteractor = RealMoviesInteractor(webRepository: webRepositories.moviesWebRepository,
+                                                    appState: appState)
+        return .init(genresInteractor: genresInteractor, moviesInteractor: moviesInteractor)
     }
 }
 
 extension DIContainer {
     struct WebRepositories {
         let genresWebRepository: GenresWebRepository
+        let moviesWebRepository: MoviesWebRepository
     }
 }

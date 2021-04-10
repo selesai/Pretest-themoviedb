@@ -9,14 +9,16 @@
 extension DIContainer {
     struct Interactors {
         let genresInteractor: GenresInteractor
+        let moviesInteractor: MoviesInteractor
         
-        init(genresInteractor: GenresInteractor) {
+        init(genresInteractor: GenresInteractor, moviesInteractor: MoviesInteractor) {
 
             self.genresInteractor = genresInteractor
+            self.moviesInteractor = moviesInteractor
         }
         
         static var stub: Self {
-            .init(genresInteractor: StubGenresInteractor())
+            .init(genresInteractor: StubGenresInteractor(), moviesInteractor: StubMoviesInteractor())
         }
     }
 }

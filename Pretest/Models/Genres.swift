@@ -12,6 +12,8 @@ struct GenresArrayResponse: Codable, Equatable {
 }
 
 struct Genres: Codable, Equatable {
-    let id: Int?
+    let id: GenreID
     let name: String?
+    
+    typealias GenreID = Int
 }

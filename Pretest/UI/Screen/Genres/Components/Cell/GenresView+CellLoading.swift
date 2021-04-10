@@ -13,6 +13,7 @@ extension GenresView {
             VStack {
                 VStack(spacing: 0){
                     HStack(alignment: .top) {
+                        
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color("light_gray_color"))
                             .frame(width: 30, height: 30)
