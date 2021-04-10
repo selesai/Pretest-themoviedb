@@ -13,7 +13,7 @@ extension GenresView {
         var message: String
         
         var body: some View {
-            VStack {
+            VStack(alignment: .center) {
                 Text("Failed")
                     .font(.system(size: 25))
                     .foregroundColor(.black)
@@ -25,6 +25,7 @@ extension GenresView {
                     
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         
     }
