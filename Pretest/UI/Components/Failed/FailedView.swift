@@ -20,6 +20,7 @@ struct FailedView : View {
             Text(message)
                 .font(.system(size: 16))
                 .foregroundColor(.gray)
+                .padding(.bottom, 20)
             
             Button("Refresh", action: onRefresh)
         }
