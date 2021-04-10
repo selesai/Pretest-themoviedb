@@ -14,7 +14,7 @@ extension ReviewsView {
                 LazyVStack(spacing: 0){
                     VStack(spacing: 0){
                         ForEach((0...20).indices, id: \.self) { _ in
-                            
+                            ReviewsView.CellLoading()
                         }
                     }
                 }

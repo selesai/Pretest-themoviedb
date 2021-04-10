@@ -51,7 +51,7 @@ struct MoviesView: View {
         switch data {
         case .isLoading:
             if (data.value?.count ?? 0 > 0), let movies = data.value {
-                return MoviesView.List(movies: movies) { (movie) in
+                return MoviesView.List(movies: movies, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) { (movie) in
                     routingBinding.movie.wrappedValue = movie
                     routingBinding.presentedDetail.wrappedValue = true
                 } onLoadMore: {
@@ -63,7 +63,7 @@ struct MoviesView: View {
                 return MoviesView.Loading().toAnyView
             }
         case let .loaded(movies):
-            return MoviesView.List(movies: movies) { (movie) in
+            return MoviesView.List(movies: movies, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) { (movie) in
                 routingBinding.movie.wrappedValue = movie
                 routingBinding.presentedDetail.wrappedValue = true
             } onLoadMore: {
@@ -72,7 +72,11 @@ struct MoviesView: View {
             }
             .toAnyView
         case let .failed(error):
-            return GenresView.Failed(message: error.localizedDescription).toAnyView
+            return FailedView(message: error.localizedDescription) {
+                routingBinding.page.wrappedValue = 1
+                self.getMovies()
+            }
+            .toAnyView
         default:
             return MoviesView.Loading().toAnyView
         }

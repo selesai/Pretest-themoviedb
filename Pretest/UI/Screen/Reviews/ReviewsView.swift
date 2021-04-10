@@ -43,11 +43,27 @@ struct ReviewsView: View {
     func makeState() -> some View {
         switch data {
         case .isLoading:
-            return ReviewsView.Loading().toAnyView
+            if (data.value?.count ?? 0 > 0), let reviews = data.value {
+                return ReviewsView.List(reviews: reviews, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) {
+                    routingBinding.page.wrappedValue += 1
+                    self.getReviews()
+                }
+                .toAnyView
+            } else {
+                return ReviewsView.Loading().toAnyView
+            }
         case let .loaded(reviews):
-            return ReviewsView.List(reviews: reviews).toAnyView
+            return ReviewsView.List(reviews: reviews, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) {
+                routingBinding.page.wrappedValue += 1
+                self.getReviews()
+            }
+            .toAnyView
         case let .failed(error):
-            return GenresView.Failed(message: error.localizedDescription).toAnyView
+            return FailedView(message: error.localizedDescription) {
+                routingBinding.page.wrappedValue = 1
+                self.getReviews()
+            }
+            .toAnyView
         default:
             return ReviewsView.Loading().toAnyView
         }

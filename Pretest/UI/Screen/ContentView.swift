@@ -36,11 +36,7 @@ struct ContentView: View {
 // MARK: - Routing
 extension ContentView {
     struct Routing: Equatable {
-        //popup
-        var popupIcon: String?
-        var popupMessage: String = ""
-        var popupPresent: Bool = false
-        var popupType: BannerPopup.PopupType = .default
+        
     }
 }
 
