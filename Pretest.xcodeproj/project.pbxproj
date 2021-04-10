@@ -26,8 +26,6 @@
 		5619C7E12620640A0088662B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7DE2620640A0088662B /* AppState.swift */; };
 		5619C7E22620640A0088662B /* InteractorsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7DF2620640A0088662B /* InteractorsContainer.swift */; };
 		5619C7E5262090E80088662B /* RootViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7E4262090E80088662B /* RootViewModifier.swift */; };
-		5619C7F0262163100088662B /* BannerPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7EF262163100088662B /* BannerPopup.swift */; };
-		5619C7F3262163490088662B /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7F2262163490088662B /* PopupView.swift */; };
 		5619C7F6262164980088662B /* GenresWebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7F5262164980088662B /* GenresWebRepository.swift */; };
 		5619C7F9262164DF0088662B /* Genres.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7F8262164DF0088662B /* Genres.swift */; };
 		5619C7FC2621698F0088662B /* GenresInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619C7FB2621698F0088662B /* GenresInteractor.swift */; };
@@ -100,8 +98,6 @@
 		5619C7DE2620640A0088662B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		5619C7DF2620640A0088662B /* InteractorsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractorsContainer.swift; sourceTree = "<group>"; };
 		5619C7E4262090E80088662B /* RootViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModifier.swift; sourceTree = "<group>"; };
-		5619C7EF262163100088662B /* BannerPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerPopup.swift; sourceTree = "<group>"; };
-		5619C7F2262163490088662B /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		5619C7F5262164980088662B /* GenresWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenresWebRepository.swift; sourceTree = "<group>"; };
 		5619C7F8262164DF0088662B /* Genres.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genres.swift; sourceTree = "<group>"; };
 		5619C7FB2621698F0088662B /* GenresInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenresInteractor.swift; sourceTree = "<group>"; };
@@ -322,7 +318,6 @@
 			children = (
 				5619C8D62622146F0088662B /* Failed */,
 				5619C8602621BD8B0088662B /* ImageView */,
-				5619C7EE262162C50088662B /* Banner */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -336,15 +331,6 @@
 				5619C8D326220ED30088662B /* Date+Extension.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		5619C7EE262162C50088662B /* Banner */ = {
-			isa = PBXGroup;
-			children = (
-				5619C7EF262163100088662B /* BannerPopup.swift */,
-				5619C7F2262163490088662B /* PopupView.swift */,
-			);
-			path = Banner;
 			sourceTree = "<group>";
 		};
 		5619C80126216BB50088662B /* Genres */ = {
@@ -650,7 +636,6 @@
 				5619C88A2622001C0088662B /* VideosView.swift in Sources */,
 				5619C79D26205FFA0088662B /* AppDelegate.swift in Sources */,
 				5619C80326216BF60088662B /* GenresView.swift in Sources */,
-				5619C7F0262163100088662B /* BannerPopup.swift in Sources */,
 				5619C83C262193430088662B /* MoviesView+List.swift in Sources */,
 				5619C7FC2621698F0088662B /* GenresInteractor.swift in Sources */,
 				5619C7BC262062750088662B /* AppEnvironment.swift in Sources */,
@@ -678,7 +663,6 @@
 				5619C82126216FF50088662B /* ShimmerView.swift in Sources */,
 				5619C7CC262062C00088662B /* NetworkingHelpers.swift in Sources */,
 				5619C82E262190CF0088662B /* DetailsView.swift in Sources */,
-				5619C7F3262163490088662B /* PopupView.swift in Sources */,
 				5619C87C2621E67E0088662B /* Credits.swift in Sources */,
 				5619C85626219C050088662B /* BodyDeserializer.swift in Sources */,
 				5619C8BF262208AB0088662B /* ReviewsView+CellLoading.swift in Sources */,
