@@ -63,6 +63,13 @@ private extension VideosView {
     }
 }
 
+// MARK: - Routing
+extension VideosView {
+    struct Routing: Equatable {
+        
+    }
+}
+
 // MARK: - State Updates
 private extension VideosView {
     var routingUpdate: AnyPublisher<Routing, Never> {

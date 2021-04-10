@@ -118,9 +118,7 @@ struct DetailsView : View {
                     Divider()
                         .padding(.vertical, 5)
                     
-                    Button {
-                        
-                    } label: {
+                    NavigationLink(destination: ReviewsView(movie: movie)) {
                         HStack {
                             Image(systemName: "star.lefthalf.fill")
                                 .foregroundColor(Color.yellow)

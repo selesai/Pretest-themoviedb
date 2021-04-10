@@ -51,10 +51,31 @@ extension WebRepository {
 }
 
 class JSONWithDateDecoder: JSONDecoder {
-    let dateFormatter = DateFormatter()
-
+    
+    enum DateError: String, Error {
+        case invalidDate
+    }
+    
+    let formatter = DateFormatter()
+    
     override init() {
         super.init()
-        dateDecodingStrategy = .iso8601
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateDecodingStrategy = .custom({ (decoder) -> Date in
+            let container = try decoder.singleValueContainer()
+            let dateStr = try container.decode(String.self)
+
+            self.formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            if let date = self.formatter.date(from: dateStr) {
+                return date
+            }
+            self.formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
+            if let date = self.formatter.date(from: dateStr) {
+                return date
+            }
+            throw DateError.invalidDate
+        })
     }
 }

@@ -11,17 +11,47 @@ extension ReviewsView {
     struct Cell : View {
         
         var review: Reviews
+        @State var expanded: Bool = false
         
         var body: some View {
             VStack {
                 VStack(spacing: 0){
-                    HStack(alignment: .center){
-                        Image(uiImage: initialImage(name: genre.name ?? "Uncategorized"))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    VStack {
+                        HStack(alignment: .center) {
+                            ImageView(url: getURL(path: review.authorDetails?.avatarPath ?? ""))
+                                .frame(width: 30, height: 30)
+                                .cornerRadius(14)
+                            
+                            Text(review.author ?? "-")
+                                .font(.system(size: 14))
+                                .foregroundColor(Color.black)
+                            
+                            Spacer()
+                            
+                            Text(review.createdAt?.toStringWithFormat("MMM d") ?? "")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color.gray)
+                                .italic()
+                            
+                            Image(systemName: expanded ? "chevron.up" : "chevron.down")
+                                .resizable()
+                                .foregroundColor(Color.gray)
+                                .frame(width: 15, height: 8)
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.expanded.toggle()
+                                    }
+                                }
+                            
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Text(genre.name ?? "Uncategorized")
+                        Text(review.content ?? "-")
                             .font(.system(size: 14))
-                            .foregroundColor(Color.black)
+                            .foregroundColor(Color.gray)
+                            .lineLimit(expanded ? 100 : 3)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
                     }
                     .padding([.top, .leading, .trailing], 10)
                     .padding(.bottom, 10)
@@ -34,24 +64,10 @@ extension ReviewsView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding([.leading, .trailing], 20)
             .padding(.bottom, 5)
-            .onTapGesture {
-                selection(genre)
-            }
         }
         
-        func initialImage(name: String) -> UIImage {
-            let image = name.generateImage(backgroundColor: nil,
-                               resize: true,
-                               circular: false,
-                               textAttributes: [
-                                NSAttributedString.Key.foregroundColor : UIColor.white
-                               ],
-                               gradient: false,
-                               gradientColors: nil,
-                               size: CGSize(width: 30, height: 30),
-                               isInitial: true)
-            return image
+        func getURL(path: String) -> URL {
+            return URL(string: "https://www.themoviedb.org/t/p/w200\(path)")!
         }
-        
     }
 }

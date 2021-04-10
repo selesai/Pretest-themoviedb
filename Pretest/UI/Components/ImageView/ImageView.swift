@@ -11,13 +11,19 @@ import Kingfisher
 struct ImageView : View {
     
     let url: URL
+    let height: CGFloat
+    
+    init(url: URL, height: CGFloat = 200) {
+        self.url = url
+        self.height = height
+    }
     
     var body: some View {
         KFImage.url(url)
             .placeholder {
                 Image("placeholder_image")
                     .resizable()
-                    .frame(height: 200)
+                    .frame(height: height)
             }
             .fade(duration: 0.25)
             .resizable()

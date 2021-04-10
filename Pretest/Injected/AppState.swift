@@ -21,6 +21,7 @@ extension AppState {
         var moviesView =  MoviesView.Routing()
         var detailsView = DetailsView.Routing()
         var videosView = VideosView.Routing()
+        var reviewsView = ReviewsView.Routing()
     }
 }
 

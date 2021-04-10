@@ -21,7 +21,7 @@ extension ReviewsView {
             ScrollView {
                 LazyVStack {
                     ForEach(reviews.indices, id: \.self) { (index) in
-                        ReviewsView.Cell(genre: genres[index], selection: selection)
+                        ReviewsView.Cell(review: reviews[index])
                     }
                 }
             }
