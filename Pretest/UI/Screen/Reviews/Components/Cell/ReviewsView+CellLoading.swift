@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-extension GenresView {
-    struct ReviewsView: View {
+extension ReviewsView {
+    struct CellLoading: View {
         var body: some View{
             VStack {
                 VStack(spacing: 0){
@@ -23,6 +23,7 @@ extension GenresView {
                                 .fill(Color("light_gray_color"))
                                 .frame(maxWidth: 100, maxHeight: 20)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color("light_gray_color"))

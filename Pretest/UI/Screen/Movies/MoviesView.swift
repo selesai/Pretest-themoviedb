@@ -16,7 +16,6 @@ struct MoviesView: View {
         $routingState.dispatched(to: injected.appState, \.routing.moviesView)
     }
     
-    @State private var page: Int = 1
     @State private(set) var data: Loadable<[Movies]>
     let genre: Genres
     
@@ -52,11 +51,11 @@ struct MoviesView: View {
         switch data {
         case .isLoading:
             if (data.value?.count ?? 0 > 0), let movies = data.value {
-                return MoviesView.List(movies: movies) { (movie) in
+                return MoviesView.List(movies: movies, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) { (movie) in
                     routingBinding.movie.wrappedValue = movie
                     routingBinding.presentedDetail.wrappedValue = true
                 } onLoadMore: {
-                    self.page += 1
+                    routingBinding.page.wrappedValue += 1
                     self.getMovies()
                 }
                 .toAnyView
@@ -64,16 +63,20 @@ struct MoviesView: View {
                 return MoviesView.Loading().toAnyView
             }
         case let .loaded(movies):
-            return MoviesView.List(movies: movies) { (movie) in
+            return MoviesView.List(movies: movies, availableLoadMore: routingBinding.availableLoadMore.wrappedValue) { (movie) in
                 routingBinding.movie.wrappedValue = movie
                 routingBinding.presentedDetail.wrappedValue = true
             } onLoadMore: {
-                self.page += 1
+                routingBinding.page.wrappedValue += 1
                 self.getMovies()
             }
             .toAnyView
         case let .failed(error):
-            return GenresView.Failed(message: error.localizedDescription).toAnyView
+            return FailedView(message: error.localizedDescription) {
+                routingBinding.page.wrappedValue = 1
+                self.getMovies()
+            }
+            .toAnyView
         default:
             return MoviesView.Loading().toAnyView
         }
@@ -84,7 +87,7 @@ struct MoviesView: View {
 // MARK: - Side Effects
 private extension MoviesView {
     func getMovies() {
-        injected.interactors.moviesInteractor.get(data: $data, genre: genre.id, page: page)
+        injected.interactors.moviesInteractor.get(data: $data, genre: genre.id, page: routingBinding.page.wrappedValue)
     }
 }
 
@@ -93,6 +96,7 @@ extension MoviesView {
     struct Routing: Equatable {
         var presentedDetail: Bool = false
         var movie: Movies?
+        var page: Int = 1
         var availableLoadMore: Bool = true
     }
 }

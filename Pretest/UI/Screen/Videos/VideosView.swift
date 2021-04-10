@@ -47,7 +47,10 @@ struct VideosView: View {
         case let .loaded(videos):
             return VideosView.List(videos: videos).toAnyView
         case let .failed(error):
-            return GenresView.Failed(message: error.localizedDescription).toAnyView
+            return FailedView(message: error.localizedDescription) {
+                self.getVideos()
+            }
+            .toAnyView
         default:
             return VideosView.Loading().toAnyView
         }
@@ -60,6 +63,13 @@ private extension VideosView {
     func getVideos() {
         guard let id = movie.id else { return }
         injected.interactors.moviesInteractor.videos(data: $data, id: id)
+    }
+}
+
+// MARK: - Routing
+extension VideosView {
+    struct Routing: Equatable {
+        
     }
 }
 

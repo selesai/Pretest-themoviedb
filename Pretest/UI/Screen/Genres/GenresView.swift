@@ -60,13 +60,15 @@ struct GenresView: View {
                 routingBinding.selectionTag.wrappedValue = genre.id
             }.toAnyView
         case let .failed(error):
-            return GenresView.Failed(message: error.localizedDescription).toAnyView
+            return FailedView(message: error.localizedDescription) {
+                self.getGenres()
+            }
+            .toAnyView
         default:
             return GenresView.Loading().toAnyView
         }
     }
 }
-
 
 // MARK: - Side Effects
 private extension GenresView {

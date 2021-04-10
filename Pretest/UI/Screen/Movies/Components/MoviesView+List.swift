@@ -11,6 +11,7 @@ extension MoviesView {
     struct List : View {
         
         var movies: [Movies]
+        var availableLoadMore: Bool
         var selection: (Movies) -> Void
         var onLoadMore: () -> Void
         let columns = Array(repeating: GridItem(), count: 2)
@@ -26,8 +27,10 @@ extension MoviesView {
                         MoviesView.Cell(movie: movies[index], selection: selection)
                     }
                     
-                    MoviesView.CellLoading()
-                        .onAppear(perform: onLoadMore)
+                    if availableLoadMore {
+                        MoviesView.CellLoading()
+                            .onAppear(perform: onLoadMore)
+                    }
                 }
                 .padding(20)
             }

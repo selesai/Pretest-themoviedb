@@ -12,6 +12,8 @@ extension ReviewsView {
     struct List : View {
         
         var reviews: [Reviews]
+        var availableLoadMore: Bool
+        var onLoadMore: () -> Void
         
         var body: some View {
             self.content
@@ -21,7 +23,12 @@ extension ReviewsView {
             ScrollView {
                 LazyVStack {
                     ForEach(reviews.indices, id: \.self) { (index) in
-                        ReviewsView.Cell(genre: genres[index], selection: selection)
+                        ReviewsView.Cell(review: reviews[index])
+                    }
+                    
+                    if availableLoadMore {
+                        ReviewsView.CellLoading()
+                            .onAppear(perform: onLoadMore)
                     }
                 }
             }

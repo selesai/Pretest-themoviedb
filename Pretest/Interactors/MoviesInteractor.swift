@@ -13,6 +13,7 @@ protocol MoviesInteractor {
     func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int)
     func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int)
     func videos(data: LoadableSubject<[Videos]>, id: Int)
+    func reviews(data: LoadableSubject<[Reviews]>, id: Int, page: Int)
 }
 
 struct RealMoviesInteractor: MoviesInteractor {
@@ -84,10 +85,42 @@ struct RealMoviesInteractor: MoviesInteractor {
             }
             .store(in: cancelBag)
     }
+    
+    func reviews(data: LoadableSubject<[Reviews]>, id: Int, page: Int) {
+        data.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        weak var weakAppState = appState
+        webRepository.reviews(id: id, page: page)
+            .map { (response) -> [Reviews] in
+                return response.results
+            }
+            .sinkToLoadable { (result) in
+                if page == 1 {
+                    data.wrappedValue = result
+                    if (data.wrappedValue.value?.isEmpty ?? false) {
+                        weakAppState?[\.routing.reviewsView.availableLoadMore] = false
+                    } else {
+                        weakAppState?[\.routing.reviewsView.availableLoadMore] = true
+                    }
+                } else {
+                    var reviews = data.wrappedValue.value ?? []
+                    if let newReviews = result.value {
+                        reviews.append(contentsOf: newReviews)
+                    }
+                    if (result.value?.isEmpty ?? false) {
+                        weakAppState?[\.routing.reviewsView.availableLoadMore] = false
+                    } else {
+                        weakAppState?[\.routing.reviewsView.availableLoadMore] = true
+                    }
+                    data.wrappedValue = .loaded(reviews)
+                }
+            }
+            .store(in: cancelBag)
+    }
 }
 
 struct StubMoviesInteractor: MoviesInteractor {
     func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int) { }
     func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int) { }
     func videos(data: LoadableSubject<[Videos]>, id: Int) { }
+    func reviews(data: LoadableSubject<[Reviews]>, id: Int, page: Int) { }
 }

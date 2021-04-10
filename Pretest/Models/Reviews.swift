@@ -14,7 +14,8 @@ struct ReviewsArrayResponse: Codable, Equatable {
 struct Reviews: Codable, Equatable {
     let author: String?
     let authorDetails: AuthorDetails?
-    let content, createdAt, id, updatedAt: String?
+    let content, id: String?
+    let createdAt, updatedAt: Date?
     let url: String?
 
     enum CodingKeys: String, CodingKey {

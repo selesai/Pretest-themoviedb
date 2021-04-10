@@ -16,6 +16,7 @@ protocol APICall {
 }
 
 enum APIError: Swift.Error {
+    case noInternet
     case invalidURL
     case unexpectedResponse
 }
@@ -23,6 +24,7 @@ enum APIError: Swift.Error {
 extension APIError: LocalizedError {
     var errorDescription: String? {
         switch self {
+        case .noInternet: return "The Internet connection appears to be offline"
         case .invalidURL: return "Invalid URL"
         case .unexpectedResponse: return "Unexpected response from the server"
         }
