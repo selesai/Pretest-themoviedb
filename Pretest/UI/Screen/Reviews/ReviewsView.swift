@@ -1,5 +1,5 @@
 //
-//  VideosView.swift
+//  ReviewsView.swift
 //  Pretest
 //
 //  Created by Marsudi Widodo on 10/04/21.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct VideosView: View {
+struct ReviewsView: View {
     
     @Environment(\.injected) private var injected: DIContainer
     @State private var routingState: Routing = .init()
@@ -16,10 +16,10 @@ struct VideosView: View {
         $routingState.dispatched(to: injected.appState, \.routing.videosView)
     }
     
-    @State private(set) var data: Loadable<[Videos]>
+    @State private(set) var data: Loadable<[Reviews]>
     let movie: Movies
     
-    init(data: Loadable<[Videos]> = .notRequested, movie: Movies) {
+    init(data: Loadable<[Reviews]> = .notRequested, movie: Movies) {
         self._data = .init(initialValue: data)
         self.movie = movie
     }
@@ -28,9 +28,9 @@ struct VideosView: View {
         self.content
             .onReceive(routingUpdate) { self.routingState = $0 }
             .onAppear {
-                self.getVideos()
+                self.getReviews()
             }
-            .navigationTitle("Videos: \(movie.title ?? "")")
+            .navigationTitle("Reviews: \(movie.title ?? "")")
     }
     
     var content: some View {
@@ -43,28 +43,28 @@ struct VideosView: View {
     func makeState() -> some View {
         switch data {
         case .isLoading:
-            return VideosView.Loading().toAnyView
+            return ReviewsView.Loading().toAnyView
         case let .loaded(videos):
-            return VideosView.List(videos: videos).toAnyView
+            return ReviewsView.List(videos: videos).toAnyView
         case let .failed(error):
             return GenresView.Failed(message: error.localizedDescription).toAnyView
         default:
-            return VideosView.Loading().toAnyView
+            return ReviewsView.Loading().toAnyView
         }
     }
 }
 
 
 // MARK: - Side Effects
-private extension VideosView {
-    func getVideos() {
+private extension ReviewsView {
+    func getReviews() {
         guard let id = movie.id else { return }
         injected.interactors.moviesInteractor.videos(data: $data, id: id)
     }
 }
 
 // MARK: - State Updates
-private extension VideosView {
+private extension ReviewsView {
     var routingUpdate: AnyPublisher<Routing, Never> {
         injected.appState.updates(for: \.routing.videosView)
     }

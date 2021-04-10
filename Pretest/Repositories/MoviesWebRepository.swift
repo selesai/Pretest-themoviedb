@@ -14,6 +14,7 @@ protocol MoviesWebRepository: WebRepository {
     func get(genre: Int, page: Int) -> AnyPublisher<MoviesArrayResponse, Error>
     func credits(id: Int) -> AnyPublisher<CreditsArrayResponse, Error>
     func detail(id: Int) -> AnyPublisher<MoviesDetail, Error>
+    func videos(id: Int) -> AnyPublisher<VideosArrayResponse, Error>
 }
 
 struct RealMoviesWebRepository: MoviesWebRepository {
@@ -37,6 +38,10 @@ struct RealMoviesWebRepository: MoviesWebRepository {
     func credits(id: Int) -> AnyPublisher<CreditsArrayResponse, Error> {
         return call(endpoint: API.credits(id: id))
     }
+    
+    func videos(id: Int) -> AnyPublisher<VideosArrayResponse, Error> {
+        return call(endpoint: API.videos(id: id))
+    }
 }
 
 // MARK: - Endpoints
@@ -45,6 +50,7 @@ extension RealMoviesWebRepository {
         case get(genre: Int, page: Int)
         case credits(id: Int)
         case detail(id: Int)
+        case videos(id: Int)
     }
 }
 
@@ -57,6 +63,8 @@ extension RealMoviesWebRepository.API: APICall {
             return "/3/movie/\(id)/credits"
         case let .detail(id):
             return "/3/movie/\(id)"
+        case let .videos(id):
+            return "/3/movie/\(id)/videos"
         }
     }
     
