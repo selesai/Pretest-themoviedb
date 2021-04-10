@@ -2,23 +2,27 @@ PODS:
   - Alamofire (5.4.1)
   - CrossroadRegex (1.1.0)
   - Kingfisher (6.2.1)
+  - YouTubePlayer (0.7.2)
 
 DEPENDENCIES:
   - Alamofire
   - CrossroadRegex
   - Kingfisher
+  - YouTubePlayer
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - CrossroadRegex
     - Kingfisher
+    - YouTubePlayer
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   CrossroadRegex: 5eaadb3f7b4014728f1cbd1014756b126c1dbd9a
   Kingfisher: e71c6fac2aebb1262888cabc2cb13d313362a48f
+  YouTubePlayer: 2b5f2830d8f9b2cde942083211291e382c9e6bd5
 
-PODFILE CHECKSUM: 2ab6615d51dec6d13753baec9f0658b91dd6ec2a
+PODFILE CHECKSUM: 5a4c94757906aec29a0670a5f574afc35779b1ba
 
 COCOAPODS: 1.10.1

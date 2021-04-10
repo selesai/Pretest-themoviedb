@@ -12,6 +12,7 @@ import SwiftUI
 protocol MoviesInteractor {
     func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int)
     func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int)
+    func videos(data: LoadableSubject<[Videos]>, id: Int)
 }
 
 struct RealMoviesInteractor: MoviesInteractor {
@@ -70,9 +71,23 @@ struct RealMoviesInteractor: MoviesInteractor {
             }
             .store(in: cancelBag)
     }
+    
+    func videos(data: LoadableSubject<[Videos]>, id: Int) {
+        data.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        
+        webRepository.videos(id: id)
+            .map { (response) -> [Videos] in
+                return response.results
+            }
+            .sinkToLoadable { (result) in
+                data.wrappedValue = result
+            }
+            .store(in: cancelBag)
+    }
 }
 
 struct StubMoviesInteractor: MoviesInteractor {
     func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int) { }
     func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int) { }
+    func videos(data: LoadableSubject<[Videos]>, id: Int) { }
 }

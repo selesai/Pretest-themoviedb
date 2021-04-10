@@ -99,9 +99,7 @@ struct DetailsView : View {
                     .padding(.vertical, 20)
                 
                 VStack {
-                    Button {
-                        
-                    } label: {
+                    NavigationLink(destination: VideosView(movie: movie)) {
                         HStack {
                             Image(systemName: "video.fill")
                                 .foregroundColor(Color.red)
