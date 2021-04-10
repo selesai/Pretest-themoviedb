@@ -12,6 +12,8 @@ import Alamofire
 
 protocol MoviesWebRepository: WebRepository {
     func get(genre: Int, page: Int) -> AnyPublisher<MoviesArrayResponse, Error>
+    func credits(id: Int) -> AnyPublisher<CreditsArrayResponse, Error>
+    func detail(id: Int) -> AnyPublisher<MoviesDetail, Error>
 }
 
 struct RealMoviesWebRepository: MoviesWebRepository {
@@ -25,8 +27,15 @@ struct RealMoviesWebRepository: MoviesWebRepository {
     }
     
     func get(genre: Int, page: Int) -> AnyPublisher<MoviesArrayResponse, Error> {
-        print("call")
         return call(endpoint: API.get(genre: genre, page: page))
+    }
+    
+    func detail(id: Int) -> AnyPublisher<MoviesDetail, Error> {
+        return call(endpoint: API.detail(id: id))
+    }
+    
+    func credits(id: Int) -> AnyPublisher<CreditsArrayResponse, Error> {
+        return call(endpoint: API.credits(id: id))
     }
 }
 
@@ -34,6 +43,8 @@ struct RealMoviesWebRepository: MoviesWebRepository {
 extension RealMoviesWebRepository {
     enum API {
         case get(genre: Int, page: Int)
+        case credits(id: Int)
+        case detail(id: Int)
     }
 }
 
@@ -42,6 +53,10 @@ extension RealMoviesWebRepository.API: APICall {
         switch self {
         case let .get(genre, page):
             return "/3/discover/movie?with_genres=\(genre)&page=\(page)"
+        case let .credits(id):
+            return "/3/movie/\(id)/credits"
+        case let .detail(id):
+            return "/3/movie/\(id)"
         }
     }
     

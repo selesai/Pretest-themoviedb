@@ -10,7 +10,8 @@ import Foundation
 import SwiftUI
 
 protocol MoviesInteractor {
-    func get(data: LoadableSubject<LazyList<Movies>>, genre: Int, page: Int)
+    func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int)
+    func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int)
 }
 
 struct RealMoviesInteractor: MoviesInteractor {
@@ -24,12 +25,45 @@ struct RealMoviesInteractor: MoviesInteractor {
         self.appState = appState
     }
     
-    func get(data: LoadableSubject<LazyList<Movies>>, genre: Int, page: Int) {
+    func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int) {
         data.wrappedValue.setIsLoading(cancelBag: cancelBag)
-        
+        weak var weakAppState = appState
         webRepository.get(genre: genre, page: page)
-            .map { (response) -> LazyList<Movies> in
-                return (response.results?.lazyList ?? [].lazyList)
+            .map { (response) -> [Movies] in
+                return (response.results ?? [])
+            }
+            .sinkToLoadable { (result) in
+                if page == 1 {
+                    data.wrappedValue = result
+                    if (data.wrappedValue.value?.isEmpty ?? false) {
+                        weakAppState?[\.routing.moviesView.availableLoadMore] = false
+                    } else {
+                        weakAppState?[\.routing.moviesView.availableLoadMore] = true
+                    }
+                } else {
+                    var movies = data.wrappedValue.value ?? []
+                    if let newMovies = result.value {
+                        movies.append(contentsOf: newMovies)
+                    }
+                    if (result.value?.isEmpty ?? false) {
+                        weakAppState?[\.routing.moviesView.availableLoadMore] = false
+                    } else {
+                        weakAppState?[\.routing.moviesView.availableLoadMore] = true
+                    }
+                    data.wrappedValue = .loaded(movies)
+                }
+            }
+            .store(in: cancelBag)
+    }
+    
+    func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int) {
+        data.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        let details = webRepository.detail(id: id)
+        let credits = webRepository.credits(id: id)
+        
+        Publishers.Zip(details, credits)
+            .map { (response) -> (MoviesDetail, [Cast], [Crew]) in
+                return (response.0, response.1.cast, response.1.crew)
             }
             .sinkToLoadable { (result) in
                 data.wrappedValue = result
@@ -39,5 +73,6 @@ struct RealMoviesInteractor: MoviesInteractor {
 }
 
 struct StubMoviesInteractor: MoviesInteractor {
-    func get(data: LoadableSubject<LazyList<Movies>>, genre: Int, page: Int) { }
+    func get(data: LoadableSubject<[Movies]>, genre: Int, page: Int) { }
+    func detail(data: LoadableSubject<(MoviesDetail, [Cast], [Crew])>, id: Int) { }
 }

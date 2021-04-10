@@ -16,10 +16,11 @@ struct MoviesView: View {
         $routingState.dispatched(to: injected.appState, \.routing.moviesView)
     }
     
-    @State private(set) var data: Loadable<LazyList<Movies>>
+    @State private var page: Int = 1
+    @State private(set) var data: Loadable<[Movies]>
     let genre: Genres
     
-    init(data: Loadable<LazyList<Movies>> = .notRequested, genre: Genres) {
+    init(data: Loadable<[Movies]> = .notRequested, genre: Genres) {
         self._data = .init(initialValue: data)
         self.genre = genre
     }
@@ -31,6 +32,13 @@ struct MoviesView: View {
                 self.getMovies()
             }
             .navigationTitle("Discover: \(genre.name ?? "")")
+            .sheet(isPresented: routingBinding.presentedDetail, content: {
+                if let movie = routingBinding.movie.wrappedValue {
+                    DetailsView(movie: movie, presented: routingBinding.presentedDetail).inject(injected)
+                } else {
+                    Text("")
+                }
+            })
     }
     
     var content: some View {
@@ -43,9 +51,27 @@ struct MoviesView: View {
     func makeState() -> some View {
         switch data {
         case .isLoading:
-            return MoviesView.Loading().toAnyView
+            if (data.value?.count ?? 0 > 0), let movies = data.value {
+                return MoviesView.List(movies: movies) { (movie) in
+                    routingBinding.movie.wrappedValue = movie
+                    routingBinding.presentedDetail.wrappedValue = true
+                } onLoadMore: {
+                    self.page += 1
+                    self.getMovies()
+                }
+                .toAnyView
+            } else {
+                return MoviesView.Loading().toAnyView
+            }
         case let .loaded(movies):
-            return MoviesView.List(movies: movies).toAnyView
+            return MoviesView.List(movies: movies) { (movie) in
+                routingBinding.movie.wrappedValue = movie
+                routingBinding.presentedDetail.wrappedValue = true
+            } onLoadMore: {
+                self.page += 1
+                self.getMovies()
+            }
+            .toAnyView
         case let .failed(error):
             return GenresView.Failed(message: error.localizedDescription).toAnyView
         default:
@@ -58,14 +84,16 @@ struct MoviesView: View {
 // MARK: - Side Effects
 private extension MoviesView {
     func getMovies() {
-        injected.interactors.moviesInteractor.get(data: $data, genre: genre.id, page: 1)
+        injected.interactors.moviesInteractor.get(data: $data, genre: genre.id, page: page)
     }
 }
 
 // MARK: - Routing
 extension MoviesView {
     struct Routing: Equatable {
-        
+        var presentedDetail: Bool = false
+        var movie: Movies?
+        var availableLoadMore: Bool = true
     }
 }
 

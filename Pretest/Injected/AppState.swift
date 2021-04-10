@@ -19,6 +19,7 @@ extension AppState {
         var contentView = ContentView.Routing()
         var genresView = GenresView.Routing()
         var moviesView =  MoviesView.Routing()
+        var detailsView = DetailsView.Routing()
     }
 }
 
