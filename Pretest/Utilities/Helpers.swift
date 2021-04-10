@@ -17,6 +17,16 @@ extension ProcessInfo {
     }
 }
 
+extension Locale {
+    static var backendDefault: Locale {
+        return Locale(identifier: "en")
+    }
+    
+    var shortIdentifier: String {
+        return String(identifier.prefix(2))
+    }
+}
+
 extension String {
     func localized(_ locale: Locale) -> String {
         let localeId = locale.shortIdentifier

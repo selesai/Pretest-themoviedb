@@ -17,18 +17,14 @@ protocol APICall {
 
 enum APIError: Swift.Error {
     case invalidURL
-    case httpCode(ErrorModel)
     case unexpectedResponse
-    case imageProcessing([URLRequest])
 }
 
 extension APIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL: return "Invalid URL"
-        case let .httpCode(error): return "\(error.message ?? "")"
         case .unexpectedResponse: return "Unexpected response from the server"
-        case .imageProcessing: return "Unable to load image"
         }
     }
 }
@@ -38,15 +34,22 @@ extension APICall {
         guard let url = URL(string: baseURL + path) else {
             throw APIError.invalidURL
         }
-        var request = URLRequest(url: url)
+        let currentQueryParameter = url.queryDictionary
+        var queryParameterWithApiKey = ["api_key": "be8b6c8aa9a5f4e240bb6093f9849051"]
+        if let currentQueryParameter = currentQueryParameter {
+            queryParameterWithApiKey.merge(dict: currentQueryParameter)
+        }
+        
+        var urlComponents = URLComponents(string: url.absoluteString)
+        urlComponents?.query = queryParameterWithApiKey.queryString
+        
+        guard let urlWithApiKey = urlComponents?.url else {
+            throw APIError.invalidURL
+        }
+        
+        var request = URLRequest(url: urlWithApiKey)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers
-        request.addValue("mobile-ios", forHTTPHeaderField: "Client-Request")
-        if let deviceId = deviceId, deviceId != "" {
-            request.addValue(deviceId, forHTTPHeaderField: "Device-ID")
-        } else {
-            request.addValue("123456", forHTTPHeaderField: "Device-ID")
-        }
         request.httpBody = try body()
         return request
     }
@@ -59,33 +62,41 @@ extension HTTPCodes {
     static let success = 200 ..< 300
 }
 
-extension URLRequest {
-
-    public var curlString: String {
-        // Logging URL requests in whole may expose sensitive data,
-        // or open up possibility for getting access to your user data,
-        // so make sure to disable this feature for production builds!
+extension URL {
+    var queryDictionary: [String: String]? {
+        guard let query = self.query else { return nil}
         
-        var result = "curl -k "
-
-        if let method = httpMethod {
-            result += "-X \(method) \\\n"
+        var queryStrings = [String: String]()
+        for pair in query.components(separatedBy: "&") {
+            
+            let key = pair.components(separatedBy: "=")[0]
+            
+            let value = pair
+                .components(separatedBy:"=")[1]
+                .replacingOccurrences(of: "+", with: " ")
+                .removingPercentEncoding ?? ""
+            
+            queryStrings[key] = value
         }
+        return queryStrings
+    }
+}
 
-        if let headers = allHTTPHeaderFields {
-            for (header, value) in headers {
-                result += "-H \"\(header): \(value)\" \\\n"
-            }
+extension Dictionary {
+    var queryString: String {
+        var output: String = ""
+        for (key,value) in self {
+            output +=  "\(key)=\(value)&"
         }
+        output = String(output.dropLast())
+        return output
+    }
+}
 
-        if let body = httpBody, !body.isEmpty, let string = String(data: body, encoding: .utf8), !string.isEmpty {
-            result += "-d '\(string)' \\\n"
+extension Dictionary {
+    mutating func merge(dict: [Key: Value]){
+        for (k, v) in dict {
+            updateValue(v, forKey: k)
         }
-
-        if let url = url {
-            result += url.absoluteString
-        }
-
-        return result
     }
 }
