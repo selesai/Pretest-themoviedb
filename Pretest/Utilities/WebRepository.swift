@@ -29,6 +29,7 @@ extension WebRepository {
                 .publishDecodable(type: Value.self, decoder: JSONWithDateDecoder())
                 .value()
                 .mapError { error -> Error in
+                    print(error)
                     guard (task.response?.statusCode) != nil else {
                         return APIError.unexpectedResponse
                     }

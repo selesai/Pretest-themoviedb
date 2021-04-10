@@ -40,7 +40,7 @@ extension RealGenresWebRepository.API: APICall {
     var path: String {
         switch self {
         case .get:
-            return "3/genre/movie/list"
+            return "/3/genre/movie/list"
         }
     }
     var method: String {

@@ -33,6 +33,14 @@ struct GenresView: View {
     var content: some View {
         NavigationView {
             GeometryReader { reader in
+                
+                // use navigation here
+                // for document cell
+                NavigationLink(destination: routingBinding.currentGenre.wrappedValue != nil ? MoviesView(genre: routingBinding.currentGenre.wrappedValue!).toAnyView : Text("").toAnyView,
+                               tag: routingBinding.currentTag.wrappedValue,
+                               selection: routingBinding.selectionTag)
+                    { EmptyView().hidden() }
+            
                 self.makeState()
                     .background(Color("background_color").edgesIgnoringSafeArea(.all))
             }
@@ -46,7 +54,11 @@ struct GenresView: View {
         case .isLoading:
             return GenresView.Loading().toAnyView
         case let .loaded(genres):
-            return GenresView.List(genres: genres).toAnyView
+            return GenresView.List(genres: genres) { (genre) in
+                routingBinding.currentGenre.wrappedValue = genre
+                routingBinding.currentTag.wrappedValue = genre.id
+                routingBinding.selectionTag.wrappedValue = genre.id
+            }.toAnyView
         case let .failed(error):
             return GenresView.Failed(message: error.localizedDescription).toAnyView
         default:
@@ -66,7 +78,9 @@ private extension GenresView {
 // MARK: - Routing
 extension GenresView {
     struct Routing: Equatable {
-        
+        var currentGenre: Genres?
+        var currentTag: Genres.GenreID = 0
+        var selectionTag: Genres.GenreID?
     }
 }
 

@@ -8,9 +8,11 @@
 import SwiftUI
 
 extension GenresView {
+    
     struct List : View {
         
         var genres: LazyList<Genres>
+        var selection: (Genres) -> Void
         
         var body: some View {
             self.content
@@ -20,7 +22,7 @@ extension GenresView {
             ScrollView {
                 LazyVStack {
                     ForEach(genres.indices, id: \.self) { (index) in
-                        GenresView.Cell(genre: genres[index])
+                        GenresView.Cell(genre: genres[index], selection: selection)
                     }
                 }
             }

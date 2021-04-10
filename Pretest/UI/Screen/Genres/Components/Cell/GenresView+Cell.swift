@@ -11,6 +11,7 @@ extension GenresView {
     struct Cell : View {
         
         var genre: Genres
+        var selection: (Genres) -> Void
         
         var body: some View {
             VStack {
@@ -34,6 +35,9 @@ extension GenresView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding([.leading, .trailing], 20)
             .padding(.bottom, 5)
+            .onTapGesture {
+                selection(genre)
+            }
         }
         
         func initialImage(name: String) -> UIImage {
