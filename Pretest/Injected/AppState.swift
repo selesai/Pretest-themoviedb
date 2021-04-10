@@ -17,6 +17,7 @@ struct AppState: Equatable {
 extension AppState {
     struct ViewRouting: Equatable {
         var contentView = ContentView.Routing()
+        var genresView = GenresView.Routing()
     }
 }
 

@@ -44,7 +44,7 @@ extension AppEnvironment {
     private static func configuredWebRepositories(session: Session) -> DIContainer.WebRepositories {
         
         let genresWebRepository = RealGenresWebRepository(session: session,
-                                                        baseURL: "")
+                                                        baseURL: "https://api.themoviedb.org/")
         return .init(genresWebRepository: genresWebRepository)
     }
     

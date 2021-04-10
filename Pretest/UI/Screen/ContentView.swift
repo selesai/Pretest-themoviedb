@@ -29,7 +29,7 @@ struct ContentView: View {
     }
     
     var content: some View {
-        return AnyView(Text(""))
+        return GenresView().toAnyView
     }
 }
 

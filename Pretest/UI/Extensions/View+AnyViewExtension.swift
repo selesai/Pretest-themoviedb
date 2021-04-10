@@ -1,5 +1,5 @@
 //
-//  View+AnyViewExtentions.swift
+//  View+AnyViewExtension.swift
 //  Pretest
 //
 //  Created by Marsudi Widodo on 10/04/21.
